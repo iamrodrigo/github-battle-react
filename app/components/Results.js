@@ -4,6 +4,7 @@ var queryString = require('query-string');
 var api = require('../utils/api');
 var Link = require('react-router-dom').Link;
 var PlayerPreview = require('./PlayerPreview');
+var Loading = require('./Loading');
 
 function Profile(props) {
     info = props.info;
@@ -57,7 +58,7 @@ class Results extends React.Component {
 
     componentDidMount() {
         var players = queryString.parse(this.props.location.search);
-        console.log(players);
+
         api.battle([
             players.playerOneName,
             players.playerTwoName
@@ -89,7 +90,7 @@ class Results extends React.Component {
 
         if(loading) {
             return(
-                <div>Loading</div>
+                <div><Loading /></div>
             )
         }
 
