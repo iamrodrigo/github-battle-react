@@ -8,7 +8,7 @@ function SelectLanguage(props) {
 
 	return(
 		<ul className = 'languages'>
-			{languages.map(function(language) {
+			{languages.map(language => {
 				return(
 					<li 
 						style={language === props.selectedLanguage ? {color: '#d0021b'}: null}
@@ -31,7 +31,7 @@ SelectLanguage.propTypes = {
 function RepoGrid (props) {
 	return(
 		<ul className='popular-list'>
-		{props.repos.map(function(repo, index) {
+		{props.repos.map((repo, index) => {
 			return(
 				<li key={repo.name} className='popular-item'>
 					<div className='popular-rank'>#{index + 1} </div>
@@ -61,7 +61,7 @@ RepoGrid.propTypes = {
 class Popular extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state= {
+		this.state = {
 			selectedLanguage : 'All',
 			repos: null,
 		};
@@ -74,21 +74,17 @@ class Popular extends React.Component {
 	}
 
 	updateLanguage(language) {
-		this.setState(function() {
-			return {
-				selectedLanguage: language,
-				repos: null
-			};
-		});
+		this.setState(() => ({
+			selectedLanguage: language,
+			repos: null
+			}));
 
 		api.fetchPopularRepos(language)
-		.then(function(repos) {
-			this.setState(function() {
-				return {
-					repos: repos
-				}
-			})
-		}.bind(this));
+		.then(repos => {
+			this.setState(() => ({
+				repos: repos
+			}))
+		});
 	} 
 
 	render() {
