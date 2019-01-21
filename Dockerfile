@@ -6,10 +6,8 @@ EXPOSE 5000
 
 ENV NODE_ENV production
 
-COPY . /var/www/html
-
 WORKDIR /var/www/html
 
-RUN npm i && npm install -g serve #&& npm run build
+RUN npm install -g serve
 
-CMD serve -s build
+CMD ./init.sh && serve -s build
