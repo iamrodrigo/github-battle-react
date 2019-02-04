@@ -1,18 +1,18 @@
-var React = require('react');
-var PropTypes = require('prop-types');
-var api = require('../utils/api');
-var Loading = require('./Loading');
+import React from 'react';
+import PropTypes from 'prop-types';
+import { fetchPopularRepos } from '../utils/api';
+import Loading from './Loading';
 
-function SelectLanguage(props) {
-	var languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python']; 
+function SelectLanguage({ selectedLanguage, onSelect }) {
+	const languages = ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python']; 
 
 	return(
 		<ul className = 'languages'>
 			{languages.map(language => {
 				return(
 					<li 
-						style={language === props.selectedLanguage ? {color: '#d0021b'}: null}
-						onClick={props.onSelect.bind(null, language)}
+						style={language === selectedLanguage ? {color: '#d0021b'}: null}
+						onClick={() => onSelect(language)}
 						key={language}>
 							{language}
 					</li>
@@ -59,15 +59,10 @@ RepoGrid.propTypes = {
 }
 
 class Popular extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedLanguage : 'All',
-			repos: null,
-		};
-		
-		this.updateLanguage = this.updateLanguage.bind(this);
-	}
+	state = {
+		selectedLanguage : 'All',
+		repos: null,
+	};
 
 	componentDidMount() {
 		this.updateLanguage(this.state.selectedLanguage);
@@ -79,26 +74,26 @@ class Popular extends React.Component {
 			repos: null
 			}));
 
-		api.fetchPopularRepos(language)
+		fetchPopularRepos(language)
 		.then(repos => {
-			this.setState(() => ({
-				repos: repos
-			}))
+			this.setState(() => ({ repos: repos	}))
 		});
 	} 
 
 	render() {
+		const { selectedLanguage, repos } = this.state;
+
 		return ( 
 			<div>
  				<SelectLanguage
-					selectedLanguage = {this.state.selectedLanguage}
+					selectedLanguage = {selectedLanguage}
 					onSelect = {this.updateLanguage}
 				/>
 				
-				{!this.state.repos ? <Loading /> : <RepoGrid repos={this.state.repos} />}
+				{!this.state.repos ? <Loading /> : <RepoGrid repos={repos} />}
 			</div>
 		);
 	}
 }
 
-module.exports = Popular;
+export default Popular;
